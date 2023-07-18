@@ -5,6 +5,8 @@ const sass = require('gulp-sass')(require('sass'))
 const spritesmith = require('gulp.spritesmith')
 const del = require('del')
 const rename = require('gulp-rename')
+const autoprefixer = require('gulp-autoprefixer');
+const sourcemaps = require('gulp-sourcemaps');
 
 
 /* ----------- Server----------------*/
@@ -33,8 +35,14 @@ gulp.task('templates:compile', function() {
 /* ----------- Styles----------------*/
 gulp.task('styles:compile', function() {
     return gulp.src('source/styles/main.scss')
+        .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(rename('main.min.css'))
+        .pipe(autoprefixer({
+            grid: true,
+            cascade: false,
+        }))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('build/css'));
     });
 
